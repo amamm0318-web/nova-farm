@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مزرعتي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eaf5e1;--card:#fff;--ink:#23351b;--mut:#6a7d5e;--line:#d3e5c6;--soil:#a9744a;--soil2:#8d5e3a;--acc:#3f9b2f;--accink:#fff;--gold:#f2b01e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17211a;--card:#212e24;--ink:#eaf3e4;--mut:#9fb39a;--line:#34473a;--soil:#7d5535;--soil2:#664429;--acc:#5bbf4a}}
+:root[data-theme="dark"]{--bg:#17211a;--card:#212e24;--ink:#eaf3e4;--mut:#9fb39a;--line:#34473a;--soil:#7d5535;--soil2:#664429;--acc:#5bbf4a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tajawal,system-ui,sans-serif;user-select:none}
+main{max-width:520px;margin:0 auto;padding:12px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+h1{font-size:22px;margin:0;font-weight:800}
+.coins{background:var(--card);border:2px solid var(--gold);border-radius:999px;padding:4px 14px;font-weight:800;font-size:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px}
+.lbl{font-weight:800;font-size:14px;color:var(--mut);margin-bottom:6px}
+.crops{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.crop{flex:0 0 auto;min-width:68px;text-align:center;border:2px solid var(--line);border-radius:12px;padding:6px 8px;background:var(--bg);font:inherit;color:var(--ink);cursor:pointer}
+.crop.on{border-color:var(--acc);background:var(--card)}
+.crop b{display:block;font-size:24px;font-weight:500}
+.crop small{color:var(--mut);font-size:12px;display:block;line-height:1.3}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.plot{aspect-ratio:1;background:var(--soil);border:3px solid var(--soil2);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;cursor:pointer;overflow:hidden}
+.plot .em{font-size:38px;line-height:1}
+.plot .t{font-size:12px;color:#fff;font-weight:800;margin-top:2px}
+.plot .bar{position:absolute;bottom:0;left:0;right:0;height:6px;background:rgba(0,0,0,.25)}
+.plot .bar i{display:block;height:100%;background:#7ee05f;width:0}
+.plot.empty .em{opacity:.5;color:#fff;font-size:30px}
+.plot.ready{border-color:var(--gold);animation:pop 1s infinite}
+@keyframes pop{50%{transform:scale(1.05)}}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button.up{font:inherit;font-weight:800;border:0;border-radius:12px;padding:10px 6px;background:var(--acc);color:var(--accink);cursor:pointer;line-height:1.3}
+button.up small{display:block;font-weight:500;opacity:.9}
+button.up:disabled{opacity:.45}
+button.wide{grid-column:1/-1;background:var(--gold);color:#3a2a00}
+.cust{border:2px solid var(--line);border-radius:12px;padding:8px;margin-bottom:6px;display:flex;align-items:center;gap:10px;background:var(--bg);cursor:pointer}
+.cust .em{font-size:32px;line-height:1}.cust .info{flex:1;font-size:14px}
+.cust .bar{height:6px;background:var(--line);border-radius:3px;margin-top:4px}.cust .bar i{display:block;height:100%;background:var(--acc);border-radius:3px;width:0}
+.cust.ready{border-color:var(--gold)}
+.inv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:14px}
+.xpbar{height:10px;background:var(--line);border-radius:5px}.xpbar i{display:block;height:100%;width:0;background:var(--gold);border-radius:5px;transition:width .3s}
+.tabs{display:flex;gap:8px;margin-bottom:10px}
+.tabs button{flex:1;font:inherit;font-weight:800;border:2px solid var(--line);border-radius:12px;padding:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.tabs button.on{border-color:var(--acc);background:var(--acc);color:var(--accink)}
+.tlogo{width:160px;max-width:60%;border-radius:18px;border:2px solid var(--gold)}
+.ca{direction:ltr;text-align:left;word-break:break-all;background:var(--bg);border:1px dashed var(--line);border-radius:10px;padding:10px;font-family:monospace;font-size:13px;margin-bottom:8px;user-select:text}
+a.up{display:block;text-decoration:none;text-align:center;font-weight:800;border-radius:12px;padding:10px 6px;background:var(--acc);color:var(--accink)}
+a.up.off{opacity:.45;pointer-events:none}
+.warn{border-color:var(--gold);font-size:13px;color:var(--mut)}
+.banner{width:100%;margin-bottom:10px;background:var(--gold);color:#3a2a00}
+.tabs button{font-size:13px;padding:10px 4px}
+.kb{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.kslot{aspect-ratio:1;border:2px dashed var(--line);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);font-size:30px;cursor:pointer}
+.kslot small{font-size:11px;color:var(--mut)}
+.kslot.done{border:2px solid var(--acc)}
+.kslot.chop{animation:chop .2s}
+@keyframes chop{30%{transform:translateY(6px) rotate(-7deg)}60%{transform:translateY(-3px) rotate(5deg)}}
+.tools{display:flex;gap:14px;justify-content:center;font-size:26px;margin-bottom:8px}
+.rec{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:13px}
+.plot.pen{background:#8bbf5a;border-color:#6a9a40}
+.task{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:14px}
+.task button.up{padding:6px 12px;white-space:nowrap}
+#daily button.wide{width:100%;margin-bottom:8px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#222;color:#fff;padding:8px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+<main>
+<div class="tabs"><button id="tabG" class="on" onclick="showView('g')">🚜 اللعبة</button><button id="tabT" onclick="showView('t')">👑 عملة NVQ</button><button id="tabK" onclick="showView('k')">🔪 المطبخ</button><button id="tabR" onclick="showView('r')">🎁 الجوائز</button></div>
+<div id="gameView">
+<button class="up banner" onclick="showView('t')">👑 تعرّف على عملة Nova Queen (NVQ)</button>
+<div class="top"><h1>🚜 مزرعتي</h1><div class="coins">🪙 <span id="coins">0</span></div></div>
+
+<div class="card"><div class="lbl">⭐ المستوى <b id="lv">1</b> <span id="xpt"></span></div><div class="xpbar"><i id="xpi"></i></div></div>
+<div class="card"><div class="lbl">🎯 الطريق إلى مليون عملة — <span id="goalT"></span></div><div class="xpbar"><i id="goalI"></i></div></div>
+<div class="card"><div class="lbl">اختر المحصول ثم المس قطعة فارغة لزراعته</div><div class="crops" id="crops"></div></div>
+
+<div class="card"><div class="grid" id="grid"></div></div>
+
+<div class="card"><div class="lbl">🐔 الحيوانات (المس الحيوان لجمع منتجه)</div><div class="grid" id="anGrid"></div><div class="btns" id="anBuy" style="margin-top:8px"></div></div>
+<div class="card"><div class="lbl">🎁 المهام والمكافآت اليومية</div><div id="daily"></div></div>
+<div class="card"><div class="lbl">🍽️ المطعم — <span id="rInfo"></span></div><div id="custs"></div><button class="up" id="rUp" style="width:100%;margin-top:4px" onclick="upR()"></button></div>
+<div class="card"><div class="lbl">📦 المخزن — بيع المنتجات أو استخدمها في المطعم</div><div class="inv" id="inv"></div><button class="up" id="autoB" onclick="togAuto()" style="width:100%;margin-top:8px"></button></div>
+<div class="card"><div class="lbl">التطوير</div>
+<div class="btns">
+<button class="up" id="uSpeed"></button>
+<button class="up" id="uYield"></button>
+<button class="up" id="uPlot"></button>
+<button class="up" id="uAll"></button>
+<button class="up wide" id="harvest">🧺 حصاد كل الجاهز</button>
+</div></div>
+</div>
+<div id="tokenView" hidden>
+<div class="card" style="text-align:center">
+<img class="tlogo" alt="Nova Queen" src="data:image/jpeg;base64,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">
+<h2 style="margin:10px 0 2px;font-weight:800">Nova Queen <span style="color:var(--mut)">(NVQ)</span></h2>
+<div class="lbl">عملة ميم على شبكة سولانا — منصة Pump.fun</div>
+</div>
+<div class="card"><div class="lbl">📜 التعريف</div>
+<p style="margin:0 0 8px">«ملكة نوفا» أكثر من مجرد أصل رقمي؛ هي رمز للقوة والسيادة في عالم Web3، مبنية على شبكة سولانا السريعة، وتجمع بين الجمالية المستقبلية ومجتمع يطمح للوصول إلى النجوم.</p>
+<p style="margin:0 0 8px"><b>الرؤية:</b> عملة مصممة للنمو والتوسع المستدام، ومجتمع «بلاط ملكي» يشارك في صنع مستقبلها.</p>
+<p style="margin:0"><b>المهمة:</b> بناء منظومة آمنة وقوية للمجتمع، بالشفافية والابتكار المستمر في التصميم والتسويق.</p></div>
+<div class="card"><div class="lbl">📍 عنوان العملة (Contract Address)</div>
+<div class="ca" id="ca"></div>
+<div class="btns"><button class="up" id="caCopy">📋 نسخ العنوان</button><a class="up" id="caLink" target="_blank" rel="noopener">🔗 فتح في Pump.fun</a></div></div>
+<div class="card warn">⚠️ تنبيه: العملات الرقمية عالية المخاطرة وقد تخسر كامل ما تستثمره. هذه الصفحة للتعريف فقط وليست نصيحة مالية، واللعبة لا تمنح أي أرباح أو عملات حقيقية. تحقق دائماً من العنوان قبل أي عملية.</div>
+</div>
+<div id="kitchenView" hidden>
+<div class="card"><div class="tools"><span>🔪</span><span>🍳</span><span>🥣</span><span>🧂</span></div>
+<div class="lbl">🔪 لوح التقطيع — ضع حتى 4 مكونات ثم المس كل مكون لتقطيعه</div>
+<div class="kb" id="board"></div>
+<div class="btns"><button class="up" id="cook">🍳 اطبخ</button><button class="up" id="clear" style="background:transparent;color:var(--acc);border:1px solid var(--acc)">↩ أعد المكونات</button></div>
+<div class="lbl" id="kMsg" style="margin:8px 0 0;text-align:center"></div></div>
+<div class="card"><div class="lbl">🧺 مكوناتك (المس لوضعها على اللوح)</div><div class="inv" id="kInv"></div></div>
+<div class="card"><div class="lbl">🍽️ أطباقك الجاهزة — بعها أو قدّمها لزبون في المطعم فوراً</div><div class="inv" id="kDish"></div></div>
+<div class="card"><div class="lbl">📖 الوصفات</div><div id="kRec"></div></div>
+</div>
+<div id="rewardView" hidden>
+<div class="card" style="text-align:center"><div class="lbl">🏆 مجموعة مكافأآت اللاعبين</div><div style="font-size:30px;font-weight:800" id="pool"></div><div class="lbl">NVQ — تُوزَّع على اللاعبين وفق الشروط أدناه</div></div>
+<div class="card"><div class="lbl">🎯 رحلتك</div><div id="stats"></div></div>
+<div class="card"><div class="lbl">🔒 الشروط</div><div id="conds"></div></div>
+<div class="card"><div class="lbl">👛 محفظتك على سولانا (العنوان العام فقط)</div><input type="text" id="wal" dir="ltr" placeholder="Solana wallet address" style="width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px"><div style="height:8px"></div><button class="up" id="walSave" style="width:100%">حفظ المحفظة</button><div class="lbl" id="walMsg" style="margin:6px 0 0"></div></div>
+<div class="card"><button class="up" id="entry" style="width:100%">📋 نسخ بطاقة المشاركة</button><textarea id="entryTxt" readonly rows="6" hidden style="width:100%;margin-top:8px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px"></textarea><div class="lbl" style="margin:6px 0 0">انسخ البطاقة وأرسلها لصاحب العملة عبر قناة المجتمع.</div></div>
+<div class="card warn">⚠️ لا تشارك أبداً العبارة السرية (Seed Phrase) أو المفتاح الخاص — نطلب العنوان العام فقط. التوزيع غير مضمون ويخضع لشروط صاحب العملة، ولا تعد اللعبة بقيمة مالية للعملة.</div>
+</div>
+</main>
+<div id="toast"></div>
+
+<script>
+const CROPS=[{n:'قمح',e:'🌾',c:5,t:8,s:12},{n:'جزر',e:'🥕',c:15,t:20,s:40},{n:'طماطم',e:'🍅',c:40,t:45,s:110},{n:'ذرة',e:'🌽',c:100,t:90,s:290},{n:'بطيخ',e:'🍉',c:300,t:180,s:900},{n:'بطاطس',e:'🥔',c:600,t:300,s:1400},{n:'فلفل',e:'🌶️',c:1500,t:600,s:3400},{n:'باذنجان',e:'🍆',c:4000,t:1200,s:8800},{n:'بروكلي',e:'🥦',c:11000,t:2400,s:24000},{n:'بصل',e:'🧅',c:30000,t:4800,s:64000}];
+const KEY='farm-game-v1',MAXP=15,MAXL=8;
+const UL=[1,2,4,6,9,12,15,19,23,28],RL=[3,6,9];const xpNeed=L=>Math.round(40*Math.pow(L,1.6));
+const DEF=()=>({coins:20,plots:Array(6).fill(null),speed:0,yld:0,crop:0,an:[],inv:{},auto:1,xp:0,lv:1,pt:0,dc:0,wal:'',board:[],dish:{},t0:0,dl:{},rest:{rl:0,cust:[],next:0},day:'',tk:{h:0,egg:0,earn:0},done:[0,0,0],claimed:0,streak:0,last:''});let S=DEF();
+try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(o&&Array.isArray(o.plots))S=Object.assign(S,o)}}catch(e){}
+const $=id=>document.getElementById(id);
+const fmt=n=>Math.floor(n).toLocaleString('en-US');
+const grow=c=>CROPS[c].t*Math.pow(0.9,S.speed)*1000;
+const sell=c=>Math.round(CROPS[c].s*(1+0.25*S.yld));
+const cSpeed=()=>50*Math.pow(2.6,S.speed),cYld=()=>80*Math.pow(2.6,S.yld),cPlot=()=>1;
+let toastT;function toast(m){const t=$('toast');t.textContent=m;t.className='show';clearTimeout(toastT);toastT=setTimeout(()=>t.className='',1500)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+function buildCrops(){$('crops').innerHTML='';CROPS.forEach((c,i)=>{const b=document.createElement('button');b.className='crop';b.onclick=()=>{if(S.lv<UL[i]){toast('🔒 يفتح في المستوى '+UL[i]);return}S.crop=i;paint()};b.innerHTML=`<b>${c.e}</b>${c.n}<small>🪙${c.c} ← ${sell(i)}</small>`;if(S.lv<UL[i]){b.style.opacity=.5;b.querySelector('small').textContent='🔒 مستوى '+UL[i]}$('crops').appendChild(b)})}
+let els=[];
+function buildGrid(){const g=$('grid');g.innerHTML='';els=S.plots.map((_,i)=>{const d=document.createElement('div');d.className='plot empty';d.innerHTML='<div class="em">＋</div><div class="t"></div><div class="bar"><i></i></div>';d.onclick=()=>tap(i);g.appendChild(d);return d})}
+
+function tap(i){
+  const p=S.plots[i],now=Date.now();
+  if(!p){const c=CROPS[S.crop];if(S.coins<c.c){toast('لا تملك عملات كافية');return}
+    S.coins-=c.c;S.plots[i]={c:S.crop,start:now,ready:now+grow(S.crop)}}
+  else if(now>=p.ready){addInv('c'+p.c,1);addXP(3*(p.c+1));S.tk.h++;toast('+1 '+CROPS[p.c].e);S.plots[i]=null}
+  paint();save();
+}
+$('harvest').onclick=()=>{const now=Date.now();let g=0;S.plots.forEach((p,i)=>{if(p&&now>=p.ready){addInv('c'+p.c,1);addXP(3*(p.c+1));g++;S.tk.h++;S.plots[i]=null}});if(g){toast('+'+g+' 🧺')}else toast('لا يوجد محصول جاهز');paint();save()};
+$('uSpeed').onclick=()=>{if(S.speed<MAXL&&S.coins>=cSpeed()){S.coins-=cSpeed();S.speed++;paint();save()}};
+$('uYield').onclick=()=>{if(S.yld<MAXL&&S.coins>=cYld()){S.coins-=cYld();S.yld++;buildCrops();paint();save()}};
+$('uPlot').onclick=()=>{if(S.plots.length<MAXP&&S.coins>=cPlot()){S.coins-=cPlot();S.plots.push(null);buildGrid();paint();save()}};
+$('uAll').onclick=()=>{if(confirm('هل تريد بدء مزرعة جديدة من الصفر؟')){S=DEF();checkDay();buildAnimals();buildCrops();buildGrid();paint();save()}};
+
+function paint(){
+  const now=Date.now();
+  $('coins').textContent=fmt(S.coins);
+  [...$('crops').children].forEach((b,i)=>b.classList.toggle('on',i===S.crop));
+  S.plots.forEach((p,i)=>{const d=els[i];if(!d)return;const em=d.children[0],t=d.children[1],bar=d.children[3]||d.children[2].firstChild;
+    if(!p){d.className='plot empty';em.textContent='＋';t.textContent='';d.children[2].firstChild.style.width='0'}
+    else if(now>=p.ready){d.className='plot ready';em.textContent=CROPS[p.c].e;t.textContent='جاهز! '+sell(p.c)+'🪙';d.children[2].firstChild.style.width='100%'}
+    else{d.className='plot';em.textContent=(now-p.start)/(p.ready-p.start)>0.5?'🌿':'🌱';t.textContent=Math.ceil((p.ready-now)/1000)+' ث';d.children[2].firstChild.style.width=(100*(now-p.start)/(p.ready-p.start))+'%'}
+  });
+  const sp=$('uSpeed'),yl=$('uYield'),pl=$('uPlot');
+  sp.innerHTML=S.speed>=MAXL?'💨 سماد<small>أقصى مستوى</small>':`💨 سماد (${S.speed})<small>أسرع 10% • 🪙${fmt(cSpeed())}</small>`;sp.disabled=S.speed>=MAXL||S.coins<cSpeed();
+  yl.innerHTML=S.yld>=MAXL?'🧺 سلال<small>أقصى مستوى</small>':`🧺 سلال (${S.yld})<small>ربح +25% • 🪙${fmt(cYld())}</small>`;yl.disabled=S.yld>=MAXL||S.coins<cYld();
+  pl.innerHTML=S.plots.length>=MAXP?'🟫 أرض<small>اكتملت</small>':`🟫 أرض جديدة (${S.plots.length})<small>🪙${fmt(cPlot())}</small>`;pl.disabled=S.plots.length>=MAXP||S.coins<cPlot();
+}
+$('uAll').textContent='🔄 مزرعة جديدة';
+buildCrops();buildGrid();paint();
+const AN=[{n:'دجاجة',e:'🐔',p:'🥚',c:120,t:30,s:25},{n:'بقرة',e:'🐄',p:'🥛',c:500,t:90,s:120}];
+const TASKS=[{t:'احصد 10 محاصيل',k:'h',n:10,r:100},{t:'اجمع 5 منتجات من الحيوانات',k:'egg',n:5,r:80},{t:'اربح 500 عملة',k:'earn',n:500,r:150}];
+const dk=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+const today=()=>dk(new Date()),yest=()=>dk(new Date(Date.now()-864e5));
+function checkDay(){const t=today();if(S.day!==t){S.day=t;S.dc=(S.dc||0)+1;S.tk={h:0,egg:0,earn:0};S.done=[0,0,0];S.claimed=0;if(S.last!==yest()&&S.last!==t)S.streak=0;save()}}
+function claim(){checkDay();if(S.claimed)return;S.streak++;S.last=today();S.claimed=1;const r=50*Math.min(S.streak,7);S.coins+=r;toast('🎁 +'+r+' 🪙');paint();paintX();save()}
+function doneT(i){const T=TASKS[i];if(S.done[i]||S.tk[T.k]<T.n)return;S.done[i]=1;S.coins+=T.r;toast('✅ +'+T.r+' 🪙');paint();paintX();save()}
+const anCost=i=>Math.round(AN[i].c*Math.pow(1.3,S.an.filter(x=>x.a===i).length));
+const anTime=a=>AN[a].t*Math.pow(0.9,S.speed)*1000;
+function buyAn(i){if(i===1&&S.lv<3){toast('🔒 البقرة تفتح في المستوى 3');return}if(S.an.length>=8){toast('الحظيرة ممتلئة');return}if(S.coins<anCost(i)){toast('لا تملك عملات كافية');return}S.coins-=anCost(i);S.an.push({a:i,ready:Date.now()+anTime(i)});buildAnimals();paint();paintX();save()}
+function tapAn(k){const x=S.an[k],now=Date.now();if(!x||now<x.ready)return;addInv('a'+x.a,1);addXP(5+5*x.a);S.tk.egg++;x.ready=now+anTime(x.a);toast('+1 '+AN[x.a].p);paint();paintX();save()}
+function buildAnimals(){const g=$('anGrid');g.innerHTML='';S.an.forEach((x,k)=>{const d=document.createElement('div');d.className='plot pen';d.innerHTML='<div class="em"></div><div class="t"></div>';d.onclick=()=>tapAn(k);g.appendChild(d)});$('anBuy').innerHTML='';AN.forEach((a,i)=>{const b=document.createElement('button');b.className='up';b.id='buy'+i;b.onclick=()=>buyAn(i);$('anBuy').appendChild(b)})}
+let sig='';
+function paintX(){checkDay();const now=Date.now();
+[...$('anGrid').children].forEach((d,k)=>{const x=S.an[k];if(!x)return;const a=AN[x.a],r=now>=x.ready;d.className='plot pen'+(r?' ready':'');d.children[0].textContent=r?a.p:a.e;d.children[1].textContent=r?'جاهز!':Math.ceil((x.ready-now)/1000)+' ث'});
+AN.forEach((a,i)=>{const b=$('buy'+i);if(b){b.innerHTML=a.e+' '+a.n+'<small>🪙'+fmt(anCost(i))+'</small>';b.disabled=S.an.length>=8||S.coins<anCost(i)||(i===1&&S.lv<3);if(i===1&&S.lv<3)b.querySelector('small').textContent='🔒 المستوى 3'}});
+const s=JSON.stringify([S.tk,S.done,S.claimed,S.streak]);if(s!==sig){sig=s;let h='<button class="up wide" '+(S.claimed?'disabled':'')+' onclick="claim()">'+(S.claimed?'✔ استلمت مكافأة اليوم':'🎁 مكافأة اليوم: '+50*Math.min(S.streak+1,7)+' 🪙')+'<small>أيام متتالية: '+S.streak+'</small></button>';
+TASKS.forEach((T,i)=>{const v=Math.min(S.tk[T.k],T.n);h+='<div class="task"><span>'+T.t+' ('+fmt(v)+'/'+T.n+')</span><button class="up" '+(S.done[i]||v<T.n?'disabled':'')+' onclick="doneT('+i+')">'+(S.done[i]?'تم':'🪙'+T.r)+'</button></div>'});$('daily').innerHTML=h}}
+checkDay();buildAnimals();paintX();
+const DISH=[{n:'سلطة',e:'🥗',q:{c1:1},t:10,p:60},{n:'برجر',e:'🍔',q:{c0:2,c2:1},t:20,p:170},{n:'بيتزا',e:'🍕',q:{c2:2,c0:1,a1:1},t:35,p:420},{n:'كيكة',e:'🍰',q:{c3:1,a0:2,a1:1},t:60,p:1300}];
+const FACES=['🧑','👩','👨','🧒','👵','👴'];
+const dPrice=i=>Math.round(DISH[i].p*(1+0.25*S.yld));
+const rUp=()=>250*Math.pow(3,S.rest.rl);
+function tickR(){const R=S.rest,now=Date.now();
+R.cust=R.cust.filter(c=>{if(c.st==='wait'&&now>c.dl){toast('😠 غادر زبون غاضب');return false}return true});
+if(R.cust.length<2+R.rl&&now>=R.next){R.cust.push({d:Math.floor(Math.random()*(R.rl+1)),f:FACES[Math.floor(Math.random()*FACES.length)],st:'wait',dl:now+60000});R.next=now+12000+Math.random()*6000;save()}
+R.cust.forEach(c=>{if(c.st==='cook'&&now>=c.ready)c.st='ready'})}
+function tapC(k){const c=S.rest.cust[k],now=Date.now();if(!c)return;if(c.st==='wait'&&(S.dish[c.d]||0)>0){S.dish[c.d]--;c.st='ready'}
+if(c.st==='wait'){const D=DISH[c.d];if(!hasQ(D.q)){toast('المكونات ناقصة — احصد وجهّز مخزنك');return}Object.keys(D.q).forEach(k=>S.inv[k]-=D.q[k]);c.st='cook';c.start=now;c.ready=now+D.t*Math.pow(0.9,S.speed)*1000}
+else if(c.st==='ready'){const v=dPrice(c.d);addXP(10*(c.d+1));S.coins+=v;S.tk.earn+=v;toast('+'+v+' 🪙');S.rest.cust.splice(k,1)}
+paint();paintR();save()}
+function upR(){if(S.rest.rl>=3)return;if(S.lv<RL[S.rest.rl]){toast('🔒 يتطلب المستوى '+RL[S.rest.rl]);return}if(S.coins<rUp())return;S.coins-=rUp();S.rest.rl++;paint();paintR(true);save()}
+let rsig='';
+function paintR(force){tickR();const R=S.rest,now=Date.now();
+const sg=R.cust.map(c=>c.f+c.d+c.st).join()+'|'+R.rl;
+if(sg!==rsig||force){rsig=sg;$('custs').innerHTML='';R.cust.forEach((c,k)=>{const d=document.createElement('div');d.className='cust';d.onclick=()=>tapC(k);d.innerHTML='<div class="em">'+c.f+'</div><div class="info"><b></b><div class="bar"><i></i></div></div><div class="em">'+DISH[c.d].e+'</div>';$('custs').appendChild(d)})}
+[...$('custs').children].forEach((d,k)=>{const c=R.cust[k];if(!c)return;const D=DISH[c.d],b=d.querySelector('b'),i=d.querySelector('i');d.className='cust'+(c.st==='ready'?' ready':'');
+if(c.st==='wait'){b.textContent='يريد '+D.n+' — المس للطبخ ('+qTxt(D.q)+')';i.style.width=(100*(c.dl-now)/60000)+'%'}
+else if(c.st==='cook'){b.textContent='يُطبخ… '+Math.ceil((c.ready-now)/1000)+' ث';i.style.width=(100*(now-c.start)/(c.ready-c.start))+'%'}
+else{b.textContent='جاهز! المس للتقديم (+'+dPrice(c.d)+' 🪙)';i.style.width='100%'}});
+const u=$('rUp');u.innerHTML=R.rl>=3?'🏆 المطعم بأعلى مستوى':'⭐ ترقية المطعم<small>أطباق ومقاعد أكثر • 🪙'+fmt(rUp())+'</small>';u.disabled=R.rl>=3||S.coins<rUp()||S.lv<RL[R.rl];if(R.rl<3&&S.lv<RL[R.rl])u.querySelector('small').textContent='🔒 المستوى '+RL[R.rl];
+$('rInfo').textContent='المقاعد '+(2+R.rl)+' • الأطباق '+(R.rl+1)+'/4'}
+const itemE=k=>k[0]==='c'?CROPS[+k.slice(1)].e:AN[+k.slice(1)].p;
+const itemV=k=>k[0]==='c'?sell(+k.slice(1)):Math.round(AN[+k.slice(1)].s*(1+0.25*S.yld));
+const needed=()=>{const s=new Set();DISH.slice(0,S.rest.rl+1).forEach(D=>Object.keys(D.q).forEach(k=>s.add(k)));KR.forEach(D=>Object.keys(D.q).forEach(k=>s.add(k)));return s};
+function addInv(k,n){if(S.auto!==0&&!needed().has(k)){const v=n*itemV(k);S.coins+=v;S.tk.earn+=v;return}S.inv[k]=(S.inv[k]||0)+n}
+function togAuto(){S.auto=S.auto!==0?0:1;paintI();save()}
+const hasQ=q=>Object.keys(q).every(k=>(S.inv[k]||0)>=q[k]);
+const qTxt=q=>Object.keys(q).map(k=>q[k]+'×'+itemE(k)).join(' ');
+function sellI(k){const n=S.inv[k]||0;if(!n)return;const v=n*itemV(k);S.coins+=v;S.tk.earn+=v;S.inv[k]=0;toast('+'+fmt(v)+' 🪙');paint();paintI();save()}
+function sellAll(){let v=0;Object.keys(S.inv).forEach(k=>{v+=(S.inv[k]||0)*itemV(k);S.inv[k]=0});if(v){S.coins+=v;S.tk.earn+=v;toast('+'+fmt(v)+' 🪙')}else toast('المخزن فارغ');paint();paintI();save()}
+let isig='';
+function paintI(){$('autoB').textContent=S.auto!==0?'🔁 بيع تلقائي لما لا يحتاجه مطعمك: مفعّل':'🔁 بيع تلقائي لما لا يحتاجه مطعمك: متوقّف';const ks=Object.keys(S.inv).filter(k=>S.inv[k]>0);const sg=ks.map(k=>k+S.inv[k]).join()+'|'+S.yld;if(sg===isig)return;isig=sg;
+const el=$('inv');el.innerHTML='';if(!ks.length){el.textContent='المخزن فارغ — احصد المحاصيل واجمع منتجات الحيوانات';return}
+ks.forEach(k=>{const b=document.createElement('button');b.className='up';b.innerHTML=itemE(k)+' × '+S.inv[k]+'<small>بيع 🪙'+fmt(S.inv[k]*itemV(k))+'</small>';b.onclick=()=>sellI(k);el.appendChild(b)});
+const a=document.createElement('button');a.className='up wide';a.textContent='💰 بيع الكل';a.onclick=sellAll;el.appendChild(a)}
+function addXP(n){S.xp+=n;while(S.xp>=xpNeed(S.lv)){S.xp-=xpNeed(S.lv);S.lv++;const r=50*S.lv;S.coins+=r;toast('🎉 المستوى '+S.lv+'! +'+r+' 🪙');buildCrops();buildAnimals()}}
+function paintL(){S.best=Math.max(S.best||0,S.coins);const gp=Math.min(S.best/1e6,1);$('goalT').textContent=fmt(S.best)+' / 1,000,000 ('+(100*gp).toFixed(1)+'%)';$('goalI').style.width=(100*gp)+'%';if(S.best>=1e6&&!S.won){S.won=1;toast('🏆 مبروك! وصلت إلى مليون عملة!');save()}const n=xpNeed(S.lv);$('lv').textContent=S.lv;$('xpt').textContent=S.xp+' / '+n+' XP';$('xpi').style.width=(100*S.xp/n)+'%'}
+setInterval(()=>{paint();paintX();paintR();paintI();paintL()},250);
+const TOKEN_CA='9oV3gV2RgtDigkQAG5tTmCDGPmQ1KTir9kYGPBeopump';
+const POOL=1500000;
+const KR=[{n:'سلطة',e:'🥗',q:{c1:1}},{n:'برجر',e:'🍔',q:{c0:2,c2:1}},{n:'بيتزا',e:'🍕',q:{c2:2,c0:1,a1:1}},{n:'كيكة',e:'🍰',q:{c3:1,a0:2,a1:1}},{n:'شوربة',e:'🍲',q:{c1:1,c5:1}},{n:'يخنة',e:'🥘',q:{c6:1,c7:1,c5:1}}];
+const kPrice=i=>i<4?dPrice(i):Math.round(1.5*Object.keys(KR[i].q).reduce((s,k)=>s+KR[i].q[k]*itemV(k),0));
+function kMatch(){const cnt={};S.board.forEach(b=>cnt[b.k]=(cnt[b.k]||0)+1);const ks=Object.keys(cnt);
+for(let i=0;i<KR.length;i++){const q=KR[i].q,qk=Object.keys(q);if(qk.length===ks.length&&qk.every(k=>q[k]===cnt[k]))return i}return -1}
+function kAdd(k){if(S.board.length>=4){toast('اللوح ممتلئ');return}if(!(S.inv[k]>0))return;S.inv[k]--;S.board.push({k:k,cuts:0});paintK();save()}
+function kChop(i){const b=S.board[i];if(!b||b.cuts>=4)return;b.cuts++;paintK();const e=$('board').children[i];if(e)e.classList.add('chop');save()}
+function kClear(){S.board.forEach(b=>S.inv[b.k]=(S.inv[b.k]||0)+1);S.board=[];paintK();save()}
+function kCook(){const r=kMatch();if(r<0||!S.board.length||S.board.some(b=>b.cuts<4))return;S.board=[];S.dish[r]=(S.dish[r]||0)+1;addXP(8*(r+1));toast('🍳 '+KR[r].n+' '+KR[r].e);paint();paintK();save()}
+function kSell(i){const n=S.dish[i]||0;if(!n)return;const v=n*kPrice(i);S.coins+=v;S.tk.earn+=v;S.dish[i]=0;toast('+'+fmt(v)+' 🪙');paint();paintK();save()}
+function paintK(){const bd=$('board');bd.innerHTML='';
+for(let i=0;i<4;i++){const d=document.createElement('div'),b=S.board[i];d.className='kslot'+(b&&b.cuts>=4?' done':'');
+if(b){d.innerHTML=itemE(b.k)+'<small>'+(b.cuts>=4?'✂️ مقطّع':'🔪 '+b.cuts+'/4')+'</small>';d.onclick=()=>kChop(i)}else d.innerHTML='<small>فارغ</small>';bd.appendChild(d)}
+const r=kMatch(),ready=S.board.length>0&&S.board.every(b=>b.cuts>=4);$('cook').disabled=!(ready&&r>=0);
+$('kMsg').textContent=!S.board.length?'اختر مكوناتك من الأسفل 👇':!ready?'المس كل مكون على اللوح لتقطيعه (4 ضربات)':r<0?'❌ هذه التركيبة لا تصنع طبقاً — جرّب وصفة أخرى':'✅ جاهز للطبخ: '+KR[r].e+' '+KR[r].n;
+const ki=$('kInv');ki.innerHTML='';const ks=Object.keys(S.inv).filter(k=>S.inv[k]>0);
+if(!ks.length)ki.textContent='لا مكونات — احصد المحاصيل أو اجمع منتجات الحيوانات';
+ks.forEach(k=>{const b=document.createElement('button');b.className='up';b.innerHTML=itemE(k)+' × '+S.inv[k];b.onclick=()=>kAdd(k);ki.appendChild(b)});
+const kd=$('kDish');kd.innerHTML='';const ds=Object.keys(S.dish).filter(i=>S.dish[i]>0);
+if(!ds.length)kd.textContent='لم تطبخ شيئاً بعد';
+ds.forEach(i=>{const b=document.createElement('button');b.className='up';b.innerHTML=KR[i].e+' × '+S.dish[i]+'<small>بيع 🪙'+fmt(S.dish[i]*kPrice(+i))+'</small>';b.onclick=()=>kSell(+i);kd.appendChild(b)});
+$('kRec').innerHTML=KR.map((x,i)=>'<div class="rec"><span>'+x.e+' '+x.n+'</span><span>'+qTxt(x.q)+' ← 🪙'+fmt(kPrice(i))+'</span></div>').join('')}
+$('cook').onclick=kCook;$('clear').onclick=kClear;
+const DEV_SALT='2b7da35efd52d634',DEV_HASH='495b6eadff5c767fce6e18a109cce104e1af302b9359fbdd3b78dbcdb3e633c1';
+async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(DEV_SALT+s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+(function(){let n=0,t=0;document.querySelector('.coins').onclick=()=>{const now=Date.now();if(now-t>5000)n=0;t=now;if(++n>=9){n=0;if($('devBox'))return;const d=document.createElement('div');d.className='card';d.id='devBox';d.innerHTML='<input type="text" id="devIn" dir="ltr" autocomplete="off" placeholder="Dev code" style="width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px"><div style="height:8px"></div><button class="up" id="devGo" style="width:100%">OK</button>';document.querySelector('.top').after(d);$('devGo').onclick=async()=>{let ok=false;try{ok=(await sha($('devIn').value.trim()))===DEV_HASH}catch(e){}if(ok){d.innerHTML='<button class="up" id="dvCoins" style="width:100%">💰 20,000,000</button><div style="height:8px"></div><textarea id="dvIn" rows="6" placeholder="الصق بطاقة لاعب هنا" style="width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px"></textarea><div style="height:8px"></div><button class="up" id="dvChk" style="width:100%">🔎 فحص البطاقة</button><div id="dvOut" class="lbl" style="margin:8px 0 0;white-space:pre-wrap"></div>';$('dvCoins').onclick=()=>{S.coins=20000000;S.dev=1;paint();save();toast('✅ 20,000,000')};$('dvChk').onclick=()=>{const ln=$('dvIn').value.trim().split('\n'),last=(ln.pop()||'').trim(),b=ln.join('\n'),good=last==='CHK:'+fnv(b+'|nvq');const fl=ln.filter(x=>x.startsWith('تنبيه')||x.startsWith('DEV'));$('dvOut').textContent=(good?'✅ البطاقة سليمة (لم تُعدَّل)':'❌ البطاقة معدَّلة أو غير صالحة')+(fl.length?'\n'+fl.join('\n'):'\nلا تنبيهات')}}else toast('❌')}}}})();;
+const CONDS=[{t:'الوصول للمستوى 10',v:()=>S.lv,n:10,p:100},{t:'اللعب في 7 أيام مختلفة',v:()=>S.dc||0,n:7,p:150},{t:'اللعب 3 ساعات إجمالاً',v:()=>Math.floor((S.pt||0)/60),n:180,p:100}];
+const walOK=a=>/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(a);
+const pts=()=>CONDS.reduce((s,c)=>s+(c.v()>=c.n?c.p:0),0);
+function paintRw(){$('pool').textContent=POOL.toLocaleString('en-US');
+const m=Math.floor((S.pt||0)/60);
+$('stats').innerHTML='🎮 يُسجَّل تقدّمك تلقائياً أثناء اللعب… ولن تعرف ما الذي سيُحتسب حتى تُكشف الشروط.';
+$('conds').innerHTML=CONDS.map((c,i)=>'<div class="task"><span>🔒 الشرط السري #'+(i+1)+'</span><b>؟؟؟</b></div>').join('')+'<div class="lbl" style="margin:8px 0 0;text-align:center">✨ ستُكشف الشروط قبل نهاية اللعبة</div>'}
+$('wal').value=S.wal||'';
+$('walSave').onclick=()=>{const a=$('wal').value.trim();if(!walOK(a)){$('walMsg').textContent='❌ العنوان غير صالح. أدخل عنوان محفظة سولانا العام.';return}S.wal=a;save();syncProfile();$('walMsg').textContent='✅ تم حفظ المحفظة على جهازك'};
+const fnv=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16).padStart(8,'0')};
+function lifeXP(){let x=S.xp;for(let l=1;l<S.lv;l++)x+=xpNeed(l);return x}
+function cardText(srv){srv=srv||[];const sm=Math.floor(srv.reduce((a,x)=>a+x[1],0)/60);const m=Math.floor((S.pt||0)/60),days=Object.keys(S.dl||{}).sort().slice(-30),x=lifeXP(),fl=[];
+if(m<5&&S.lv>=5)fl.push('مستوى مرتفع بوقت لعب قصير جداً');
+if(m>0&&x/m>40)fl.push('تقدّم أسرع من المعتاد');
+if(days.some(d=>S.dl[d]>16*3600))fl.push('وقت لعب يومي غير منطقي');
+if(S.t0&&(S.dc||0)>Math.ceil((Date.now()-S.t0)/864e5)+1)fl.push('أيام لعب أكثر من عمر السجل');
+if(window.FB&&FB.uid){if(m>sm*1.5+10)fl.push('الوقت المحلي أكبر من المسجّل على الخادم')}else if(m>10)fl.push('لا سجل على الخادم');
+const L=['Nova Queen (NVQ) v2','المحفظة: '+S.wal,'المستوى: '+S.lv+' (XP كلي: '+x+')','أول لعب: '+(S.t0?new Date(S.t0).toISOString().slice(0,10):'-'),'أيام اللعب: '+(S.dc||0),'دقائق اللعب: '+m,'تفصيل الأيام (دقائق): '+days.map(d=>d+':'+Math.floor(S.dl[d]/60)).join(', '),'المعرّف: '+((window.FB&&FB.uid)||'-'),'دقائق الخادم: '+sm+(srv.length?' ('+srv.map(x=>x[0]+':'+Math.floor(x[1]/60)).join(', ')+')':''),'النقاط: '+pts()];
+if(fl.length)L.push('تنبيه: '+fl.join(' | '));if(S.dev)L.push('DEV:1');
+const b=L.join('\n');return b+'\nCHK:'+fnv(b+'|nvq')}
+$('entry').onclick=async()=>{if(!S.wal){$('walMsg').textContent='أدخل محفظتك أولاً';return}const srv=await (window.FB&&FB.myDays?FB.myDays():Promise.resolve([])),t=cardText(srv),e=$('entryTxt');e.hidden=false;e.value=t;try{await navigator.clipboard.writeText(t);toast('تم النسخ ✅')}catch(x){e.select();toast('حدّد النص وانسخه')}};
+let FBacc=0,FBbusy=0,FBlv=0,FBwal=null;
+async function syncProfile(){try{if(window.FB&&FB.uid&&(S.lv>FBlv||(S.wal||'')!==FBwal)){await FB.profile(S.wal||'',S.lv);FBlv=S.lv;FBwal=S.wal||''}}catch(e){}}
+async function syncFB(){if(!window.FB||!FB.uid||FBbusy)return;FBbusy=1;try{const n=Math.min(FBacc,125);if(n>=60){await FB.beat(n);FBacc-=n}await syncProfile()}catch(e){}FBbusy=0}
+let lastAct=Date.now();['pointerdown','keydown'].forEach(e=>addEventListener(e,()=>{lastAct=Date.now()},{passive:true}));
+setInterval(()=>{if(!document.hidden&&Date.now()-lastAct<60000){S.pt=(S.pt||0)+1;const d=today();S.dl=S.dl||{};S.dl[d]=(S.dl[d]||0)+1;FBacc++;if(!S.t0)S.t0=Date.now();if(S.pt%15===0)save()}if(!$('rewardView').hidden)paintRw();if(FBacc>=120)syncFB()},1000);
+function showView(v){const m={g:'gameView',t:'tokenView',r:'rewardView',k:'kitchenView'},tb={g:'tabG',t:'tabT',r:'tabR',k:'tabK'};for(const x in m){$(m[x]).hidden=v!==x;$(tb[x]).className=v===x?'on':''}if(v==='r')paintRw();if(v==='k')paintK();window.scrollTo(0,0)}
+(function(){const ca=$('ca'),cp=$('caCopy'),lk=$('caLink');
+if(!TOKEN_CA){ca.textContent='سيُضاف عنوان العملة قريباً';cp.disabled=true;lk.className='up off';return}
+ca.textContent=TOKEN_CA;lk.href='https://pump.fun/coin/'+TOKEN_CA;
+cp.onclick=async()=>{try{await navigator.clipboard.writeText(TOKEN_CA);toast('تم النسخ ✅')}catch(e){const r=document.createRange();r.selectNodeContents(ca);const g=getSelection();g.removeAllRanges();g.addRange(r);toast('حدّد العنوان وانسخه يدوياً')}}})();
+</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,signInAnonymously,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getFirestore,doc,setDoc,getDoc,getDocs,collection,serverTimestamp,increment} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyArCZTVYimH3v5W2Ti-_xLyIMaq5G11weo",authDomain:"nova-farm-f37d8.firebaseapp.com",projectId:"nova-farm-f37d8",storageBucket:"nova-farm-f37d8.firebasestorage.app",messagingSenderId:"461033223493",appId:"1:461033223493:web:8d10666d587f2c1faa7a2c"};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const FB=window.FB={uid:null};
+onAuthStateChanged(auth,u=>{FB.uid=u?u.uid:null});
+signInAnonymously(auth).catch(e=>console.warn('auth',e));
+const dayKey=()=>{const d=new Date();return d.getUTCFullYear()+'-'+(d.getUTCMonth()+1)+'-'+d.getUTCDate()};
+FB.beat=async n=>{await setDoc(doc(db,'players',FB.uid,'days',dayKey()),{sec:increment(n),last:serverTimestamp()},{merge:true})};
+FB.profile=async(wallet,lv)=>{const r=doc(db,'players',FB.uid),s=await getDoc(r);
+ if(!s.exists())await setDoc(r,{wallet:wallet,lv:lv,created:serverTimestamp(),updated:serverTimestamp()});
+ else await setDoc(r,{wallet:wallet,lv:Math.max(lv,s.data().lv||1),updated:serverTimestamp()},{merge:true})};
+FB.myDays=async()=>{if(!FB.uid)return [];try{const s=await getDocs(collection(db,'players',FB.uid,'days'));return s.docs.map(d=>[d.id,d.data().sec||0]).slice(-30)}catch(e){return []}};
+</script>
+</body>
+</html>
