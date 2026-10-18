@@ -111,7 +111,7 @@ a.up.off{opacity:.45;pointer-events:none}
 <div class="btns"><button class="up" id="caCopy">📋 نسخ العنوان</button><a class="up" id="caLink" target="_blank" rel="noopener">🔗 فتح في Pump.fun</a></div></div>
 <div class="card"><div class="lbl">💎 شراء الجواهر بعملة NVQ</div>
 <div id="shopInfo" style="font-size:14px;line-height:1.8"></div><div id="shopItems" style="margin:8px 0"></div>
-<div class="ca" id="shopAddr" hidden style="margin-top:8px"></div>
+<div class="lbl" id="shopAddrL" hidden style="margin-top:8px">📥 عنوان محفظة الاستلام — أرسل إليه عملة NVQ فقط (وليس SOL). المس العنوان لنسخه.</div><div class="ca" id="shopAddr" hidden></div>
 <input type="text" id="sigIn" dir="ltr" autocomplete="off" placeholder="Transaction signature" hidden style="width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px">
 <button class="up" id="sigGo" hidden style="width:100%">إرسال للمراجعة</button>
 <div class="lbl" id="shopMsg" style="margin:8px 0 0"></div></div>
@@ -358,11 +358,11 @@ await syncGems();
 {const bg=Math.max(0,(S.vg||0)-(S.rg||0));inf.innerHTML='💎 رصيدك: <b>'+fmt(S.gems||0)+'</b> &nbsp;•&nbsp; ✅ مشتراة موثّقة: <b>'+fmt(bg)+'</b> &nbsp;•&nbsp; 👥 مكافأة إحالة: <b>'+fmt(S.rg||0)+'</b><br><span class="tier">'+(bg>0?'👑 Verified NVQ Supporter — '+tierOf(bg):'🎮 Free-to-Play')+'</span><br><small style="color:var(--mut)">الجواهر تفتح: بقرة سوداء (1000 🪙/ساعة)، بذور ذهبية، تسريع ×2. المستويات: Bronze 10 • Silver 50 • Gold 200 جوهرة.</small>'}
 it.innerHTML='';
 SHOP.forEach(x=>{const row=document.createElement('div');row.className='task';const sp=document.createElement('span');sp.innerHTML=x.e+' <b>'+x.n+'</b><br><small style="color:var(--mut)">'+x.d+'</small>';const b=document.createElement('button');b.className='up';b.textContent='💎 '+x.cost;b.disabled=(S.gems||0)<x.cost;b.onclick=()=>buyItem(x.id);row.appendChild(sp);row.appendChild(b);it.appendChild(row)});
-ad.hidden=si.hidden=sg.hidden=true;
+ad.hidden=si.hidden=sg.hidden=$('shopAddrL').hidden=true;
 const sh=(window.FB&&FB.uid)?await FB.shop():null;
 if(!sh||!sh.wallet){inf.innerHTML+='<br>🔒 شراء الجواهر بعملة NVQ سيُفعَّل قريباً.';return}
-inf.innerHTML+='<br>الشراء: <b>'+fmt(sh.nvq||0)+' NVQ</b> = <b>'+(sh.gems||10)+' جواهر</b> (≈ 1 دولار، ويتغيّر مع سعر العملة).<br>1) أرسل المبلغ من <b>محفظتك المسجّلة</b> إلى العنوان أدناه.<br>2) الصق <b>توقيع المعاملة</b> ثم أرسله للمراجعة.<br>3) بعد التحقق تظهر الجواهر في رصيدك تلقائياً.';
-ad.textContent=sh.wallet;ad.hidden=si.hidden=sg.hidden=false}
+inf.innerHTML+='<br>الشراء: <b>'+fmt(sh.nvq||0)+' NVQ</b> = <b>'+(sh.gems||10)+' جواهر</b> (≈ 1 دولار، ويتغيّر مع سعر العملة).<br>1) أرسل المبلغ <b>بعملة NVQ (وليس SOL)</b> من <b>محفظتك المسجّلة</b> إلى عنوان الاستلام أدناه.<br>2) الصق <b>توقيع المعاملة</b> ثم أرسله للمراجعة.<br>3) بعد التحقق تظهر الجواهر في رصيدك تلقائياً.';
+ad.textContent=sh.wallet;ad.hidden=si.hidden=sg.hidden=$('shopAddrL').hidden=false;ad.style.cursor='pointer';ad.onclick=async()=>{try{await navigator.clipboard.writeText(sh.wallet);toast('تم نسخ عنوان الاستلام ✅')}catch(e){toast('حدّد العنوان وانسخه يدوياً')}}}
 $('sigGo').onclick=async()=>{const v=$('sigIn').value.trim(),m=$('shopMsg');if(!B58.test(v)){m.textContent='❌ توقيع غير صالح';return}
 if(!S.wal){m.textContent='سجّل محفظتك أولاً في تبويب الجوائز';return}
 try{await FB.claim(v);m.textContent='✅ أُرسل للمراجعة. ستُضاف الجواهر بعد التحقق من المعاملة.';$('sigIn').value=''}catch(e){m.textContent='❌ تعذّر الإرسال (ربما أُرسل هذا التوقيع سابقاً)'}};
